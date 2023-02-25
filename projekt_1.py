@@ -36,99 +36,82 @@ which traverse the valley. ''',
          ]
 cara = '-' * 40
 users = {'bob': '123', 'ann': 'pass123', 'mike': 'pasword123', 'liz': 'pass132'}
-break1 = False
-for ii in range(1):  # nevěděl jsem jak lépe vyskočit z programu
-    print('$ python projekt1.py')
-    user_name = input('username: ')
-    #print('username: ', user_name)
-    pasw = input('password: ')
 
-    if not user_name in users.keys():
-        print('unregistered user, terminating the program..')
-        break
+print('$ python projekt1.py')
+user_name = input('username: ')
+#print('username: ', user_name)
+pasw = input('password: ')
 
-    while pasw != users[user_name]:
-        pasw = input('wrong password, try again or press q: ')
-        if pasw == 'q':
-            print('terminating the program..')
-            break1 = True
-            break
-    if break1:
-        break
+if not user_name in users.keys():
+    print('unregistered user, terminating the program..')
+    quit()
 
-    #print('password: ', pasw)
-    print(cara)
-    print('Welcome to the app,', user_name)
-    print('We have 3 texts to be analyzed.')
-    print(cara)
-    number = input('Enter a number btw. 1 and 3 to select: ')
-    if not number.isdigit():
-        print('A number is needed. terminating the program')
-        break
-    number = int(number)
-    if not number in [1, 2, 3]:
-        print('A wrong input. terminating the program')
-        break
-    #print('Enter a number btw. 1 and 3 to select: ', number)
-    print(cara)
+while pasw != users[user_name]:
+    pasw = input('wrong password, try again or press q: ')
+    if pasw == 'q':
+        print('terminating the program..')
+        quit()
 
-    txtsplt = TEXTS[number - 1].split(' ')
-    splitted = []  # *****odstraní znaky\n
-    for txtsplt_1 in txtsplt:
-        if '\n' in txtsplt_1:
-            inner = txtsplt_1.split('\n')
-            inner_dl = len(inner)
-            for i in range(inner_dl):
-                splitted.append(inner[i])
-        else:
-            splitted.append(txtsplt_1)  # *****odstraní znaky\n
+#print('password: ', pasw)
+print(cara)
+print('Welcome to the app,', user_name)
+print('We have 3 texts to be analyzed.')
+print(cara)
+number = input('Enter a number btw. 1 and 3 to select: ')
+if not number.isdigit():
+    print('A number is needed. terminating the program')
+    quit()
+number = int(number)
+if not number in [1, 2, 3]:
+    print('A wrong input. terminating the program')
+    quit()
+#print('Enter a number btw. 1 and 3 to select: ', number)
+print(cara)
 
-    while '' in splitted:
-        splitted.remove('')
+TEXTS[number-1] = TEXTS[number-1].replace('\n', ' ')
+splitted = TEXTS[number - 1].split(' ')
 
-    words = len(splitted)
+while '' in splitted:
+    splitted.remove('')
 
-    t_words, u_words, l_words, n_words, sum_w, max_delka, counter = 0, 0, 0, 0, 0, 0, 0
-    chart = []
-    for A in splitted:
-        t_words += 1 if A[0].isupper() else 0
-        for B in A:
-            if B.isnumeric():
-                break
-        else:
-            u_words += 1 if A.isupper() else 0
-        l_words += 1 if not A.isupper() and not A[0].isupper() and not A.isnumeric() else 0
-        if A.isnumeric():
-            n_words += 1
-            sum_w += int(A)
+words = len(splitted)
 
-        counter += 1
-        if ',' in A or '.' in A:
-            splitted[counter - 1] = splitted[counter - 1].replace(',', '')
-            splitted[counter - 1] = splitted[counter - 1].replace('.', '')
+t_words, u_words, l_words, n_words, sum_w, max_delka, counter = 0, 0, 0, 0, 0, 0, 0
+chart = []
+for A in splitted:
+    t_words += 1 if A[0].isupper() else 0
+    u_words += 1 if A.isupper() and not A.isalpha() else 0
+    l_words += 1 if not A.isupper() and not A[0].isupper() and not A.isnumeric() else 0
+    if A.isnumeric():
+        n_words += 1
+        sum_w += int(A)
 
-    for A in splitted:
-        if max_delka < len(A):
-            max_delka = len(A)
+    counter += 1
+    splitted[counter - 1] = splitted[counter - 1].replace(',', '')
+    splitted[counter - 1] = splitted[counter - 1].replace('.', '')
 
-    for i in range(max_delka):
-        chart.append(0)
-    for A in splitted:
-        chart[len(A) - 1] += 1
+for A in splitted:
+    if max_delka < len(A):
+        max_delka = len(A)
 
-    print('There are', words, 'words in the selected text.')
-    print('There are', t_words, 'titlecase words.')
-    print('There are', u_words, 'uppercase words.')
-    print('There are', l_words, 'lowercase words')
-    print('There are', n_words, 'lowercase words')
-    print('The sum of all the numbers', sum_w)
-    print(cara)
-    np = 1 if (max(chart) - 9 % 2) > 0 else 0
-    print('LEN|', ' ' * ((max(chart) - 9) // 2), 'OCCURENCE', ' ' * ((max(chart) - 9) // 2 - np), '|NR.')
-    print(cara)
+for i in range(max_delka):
+    chart.append(0)
+for A in splitted:
+    chart[len(A) - 1] += 1
 
-    for i in range(max_delka):
-        if i > 8:
-            print(i + 1, '|', '*' * chart[i], ' ' * (max(chart) - chart[i]), '|', chart[i])
-        else:
-            print('', i + 1, '|', '*' * chart[i], ' ' * (max(chart) - chart[i]), '|', chart[i])
+print('There are', words, 'words in the selected text.')
+print('There are', t_words, 'titlecase words.')
+print('There are', u_words, 'uppercase words.')
+print('There are', l_words, 'lowercase words')
+print('There are', n_words, 'lowercase words')
+print('The sum of all the numbers', sum_w)
+print(cara)
+np = 1 if (max(chart) - 9 % 2) > 0 else 0
+print('LEN|', ' ' * ((max(chart) - 9) // 2), 'OCCURENCE', ' ' * ((max(chart) - 9) // 2 - np), '|NR.')
+print(cara)
+
+for i in range(max_delka):
+    if i > 8:
+        print(i + 1, '|', '*' * chart[i], ' ' * (max(chart) - chart[i]), '|', chart[i])
+    else:
+        print('', i + 1, '|', '*' * chart[i], ' ' * (max(chart) - chart[i]), '|', chart[i])
