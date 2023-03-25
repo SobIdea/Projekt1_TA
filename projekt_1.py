@@ -80,7 +80,7 @@ t_words, u_words, l_words, n_words, sum_w, max_delka, counter = 0, 0, 0, 0, 0, 0
 chart = []
 for A in splitted:
     t_words += 1 if A[0].isupper() else 0
-    u_words += 1 if A.isupper() and not A.isalpha() else 0
+    u_words += 1 if A.isupper() and A.isalpha() else 0
     l_words += 1 if not A.isupper() and not A[0].isupper() and not A.isnumeric() else 0
     if A.isnumeric():
         n_words += 1
